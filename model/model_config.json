@@ -1,0 +1,16 @@
+{
+    "hyperparams": {
+    "latent_dim": 128,
+    "cross1_mha_num_heads": 8,
+    "cross2_mha_num_heads": 8,
+    "ffc_hidden_dims": 32,
+    "dropout": 0.2,
+    "activation": "gelu",
+    "lr": 1e-4,
+    "batch_size": 32,
+    "weight_decay": 1e-4,
+    "lambda": 0.5
+    },
+    "random_seed": 42,
+    "target_col": "label"
+}

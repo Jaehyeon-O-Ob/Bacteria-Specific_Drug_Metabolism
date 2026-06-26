@@ -1,0 +1,5 @@
+drug: Diltiazem
+drug smiles: COc1ccc(C2Sc3ccccc3N(CC[NH+](C)C)C(=O)C2OC(C)=O)cc1
+bacterial strain name: Bacteroides thetaiotaomicron VPI-5482
+
+target protein: WP_008760980.1
