@@ -11,9 +11,16 @@ from torch.utils.data import DataLoader
 from model.multi_modal_bi_mha_model import multi_modal_bi_cross_mha, collate_fn, microbe_drug_dataset
 from load_data import load_kegg_data
 
+# Make sure the external dependencies (ESM-C, MolE, KofamScan + KOfam database)
+# are downloaded before importing the modules that rely on them (same as
+# prediction.py), so this script also works on a fresh installation.
+from utils.setup_dependencies import ensure_all_dependencies
+ensure_all_dependencies()
+
 from utils.bacteria_rep_generate import ko_id_mapping, ko_filtering, extract_protein_sequence, kegg_scored_rep
 from utils.molecular_rep_generate import extract_node_sequence
 from utils.mole_antimicrobial_potential.workflow.dataset.dataset_representation import MoleculeDataset
+from utils.input_utils import parse_input_txt, collect_user_proteins
 
 def main():
     parser = argparse.ArgumentParser(description="Extract combined representations from the trained multi-modal models.")
@@ -30,7 +37,28 @@ def main():
             type=str,
             required=False,
             default='combined_representations.csv',
-            help="Filename to save the extracted representations (Default: combined_representations.csv)"
+            help="Base filename for the extracted representations. One file per fold-specific model is "
+                 "saved, e.g. combined_representations_fold_1.csv ... _fold_5.csv "
+                 "(Default: combined_representations.csv)"
+    )
+
+    parser.add_argument(
+            '--target_protein',
+            type=str,
+            required=False,
+            default=None,
+            help="User-defined protein ID(s), comma-separated, added to the model input of every bacterial "
+                 "strain (same as prediction.py). A per-record 'target protein:' line in the input text "
+                 "file can be used instead or in addition (Default: None)"
+    )
+
+    parser.add_argument(
+            '--include_proteins',
+            type=str,
+            required=False,
+            default=None,
+            help="Comma-separated protein IDs to force-include in the model input (knowledge-based "
+                 "augmentation), same as prediction.py (Default: None)"
     )
 
     parser.add_argument(
@@ -75,35 +103,6 @@ def main():
     with open(hp_config_path, 'r') as f:
         hp_config = json.load(f)['hyperparams']
 
-    # Parse input text file
-    def parse_input_txt(file_path):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-        
-        records = []
-        current_record = {}
-        
-        for line in lines:
-            line = line.strip()
-            if not line:
-                if current_record:
-                    records.append(current_record)
-                    current_record = {}
-                continue
-                
-            lower_line = line.lower()
-            if lower_line.startswith('drug smiles'):
-                current_record['drug smiles code'] = line.split(':', 1)[1].strip()
-            elif lower_line.startswith('drug:') or lower_line.startswith('drug name:'):
-                current_record['drug'] = line.split(':', 1)[1].strip()
-            elif lower_line.startswith('bacterial strain'):
-                current_record['bacterial strain name'] = line.split(':', 1)[1].strip()
-                
-        if current_record:
-            records.append(current_record)
-            
-        return pd.DataFrame(records)
-
     pred_df = parse_input_txt(args.input_txt)
     
     # Check required columns
@@ -129,7 +128,15 @@ def main():
     # 1. produce representation - Bacteria
     print("Generating Bacteria Representations...")
     ko_id_mapping(bacteria_list, cpu_cores=args.cpu_cores)
-    ko_filtering(bacteria_list, None)
+    # User-defined proteins are added exactly as in prediction.py, so that the
+    # extracted representations correspond to the same model input.
+    include_dict = collect_user_proteins(pred_df, 'bacterial strain',
+                                         target_protein=args.target_protein,
+                                         include_proteins=args.include_proteins)
+    for bac, prots in include_dict.items():
+        if prots:
+            print(f"User-defined proteins for {bac}: {', '.join(prots)}")
+    ko_filtering(bacteria_list, include_dict)
     extract_protein_sequence(bacteria_list, MAX_TOKENS_PER_BATCH=args.esm_max_tokens)
     kegg_df = kegg_scored_rep(bacteria_list)
 
@@ -203,23 +210,22 @@ def main():
         m.eval()
         models.append(m)
 
-    extracted_representations = []
+    # The five fold-specific models were trained independently, so their latent
+    # coordinates are not aligned with each other (the same dimension index does
+    # not encode the same feature across models). The representations are
+    # therefore NOT averaged across models; the representation of each
+    # fold-specific model is saved to a separate file.
+    fold_representations = {i: [] for i in range(1, len(models) + 1)}
 
     for batch_idx, batch in enumerate(dataloader):
         padded_proteins, padded_drugs, keggs, _, prot_mask, drug_mask = [b.to(device) if torch.is_tensor(b) else b for b in batch]
-        
-        combined_reps = []
-        
+
         with torch.no_grad():
-            for m in models:
+            for fold, m in enumerate(models, start=1):
                 _, _, _, _, _, combined_rep = m(
                     padded_proteins, padded_drugs, keggs, prot_mask, drug_mask
                 )
-                combined_reps.append(combined_rep.cpu().numpy())
-                
-        # Average representations across 5 models
-        avg_rep = np.mean(combined_reps, axis=0)[0] # Shape: [rep_dim]
-        extracted_representations.append(avg_rep)
+                fold_representations[fold].append(combined_rep.cpu().numpy()[0])  # Shape: [rep_dim]
 
     # 5. Save Results
     # Restore original column names
@@ -227,19 +233,23 @@ def main():
         'DrugName': 'drug',
         'bacterial strain': 'bacterial strain name'
     })
-    
-    # Create columns for the representation
-    rep_dim = extracted_representations[0].shape[0]
-    rep_columns = [f"dim_{i+1}" for i in range(rep_dim)]
-    
-    rep_df = pd.DataFrame(extracted_representations, columns=rep_columns)
-    
-    # Combine original metadata with the representations
-    final_df = pd.concat([pred_df[['drug', 'bacterial strain name', 'drug smiles code']], rep_df], axis=1)
-    
-    output_path = os.path.join(current_dir, args.output_csv)
-    final_df.to_csv(output_path, index=False)
-    print(f"Extraction complete. Combined representations saved to {output_path}")
+    meta_df = pred_df[['drug', 'bacterial strain name', 'drug smiles code']].reset_index(drop=True)
+
+    base, ext = os.path.splitext(args.output_csv)
+    ext = ext or '.csv'
+    for fold, reps in fold_representations.items():
+        rep_dim = reps[0].shape[0]
+        rep_columns = [f"dim_{i+1}" for i in range(rep_dim)]
+        rep_df = pd.DataFrame(reps, columns=rep_columns)
+
+        # Combine original metadata with the representations of this fold model
+        final_df = pd.concat([meta_df, rep_df], axis=1)
+
+        output_path = os.path.join(current_dir, f"{base}_fold_{fold}{ext}")
+        final_df.to_csv(output_path, index=False)
+        print(f"Fold {fold} combined representations saved to {output_path}")
+
+    print("Extraction complete.")
 
 if __name__ == "__main__":
     main()

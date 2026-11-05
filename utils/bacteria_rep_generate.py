@@ -56,11 +56,19 @@ def ko_id_mapping(bacteria_list: list,
             "--cpu", str(cpu_cores)
         ]
 
+        # Annotate every bacterium in the list (previously the function returned
+        # after the first bacterium, so the remaining strains had no KofamScan
+        # result and the pipeline failed later in ko_filtering).
+        print(f"Running KofamScan for {bac}...")
         try:
-            subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            return f"{bac}: Success"
-        except Exception as e:
-            return f"{bac}: Error ({e})"
+            subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+            print(f"KofamScan finished for {bac}.")
+        except subprocess.CalledProcessError as e:
+            # Remove a possibly incomplete result so that it is not reused as a
+            # cached result on the next run.
+            if os.path.exists(output_path):
+                os.remove(output_path)
+            raise RuntimeError(f"KofamScan failed for {bac}:\n{e.stderr}") from e
 
 def ko_filtering(bacteria_list:list,
                  include_proteins:dict = None):

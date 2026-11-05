@@ -1,0 +1,103 @@
+EC_level3,N_background,N_top,N_class_in_background,N_class_in_top,Fold_enrichment,P_value(Fisher_one_sided),Top_protein_ids,Top_protein_descriptions,Top_protein_full_EC,Top_protein_order,FDR_q_value(BH),Representative(FE>1 & P<=0.05)
+EC 2.7.1,672,68,34,11,3.1972318339100347,0.00022310933898726456,WP_008764531.1; WP_008767597.1; WP_008764748.1; WP_011107363.1; WP_011108144.1; WP_008765467.1; WP_008767097.1; WP_008759992.1; WP_011108490.1; WP_008761539.1; WP_008765649.1,MULTISPECIES: type III pantothenate kinase [Bacteroides]; MULTISPECIES: shikimate kinase [Bacteroides]; MULTISPECIES: dephospho-CoA kinase [Bacteroides]; MULTISPECIES: 4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol kinase [Bacteroides]; MULTISPECIES: bifunctional fucokinase/fucose-1-phosphate guanylyltransferase [Bacteroides]; MULTISPECIES: tetraacyldisaccharide 4'-kinase [Bacteroides]; MULTISPECIES: ROK family protein [Bacteroides]; MULTISPECIES: diacylglycerol kinase family protein [Bacteroides]; MULTISPECIES: ribokinase [Bacteroides]; MULTISPECIES: diacylglycerol kinase family protein [Bacteroides]; MULTISPECIES: bifunctional hydroxymethylpyrimidine kinase/phosphomethylpyrimidine kinase [Bacteroides],2.7.1.33; 2.7.1.71; 2.7.1.24; 2.7.1.148; 2.7.1.52;2.7.7.30; 2.7.1.130; 2.7.1.2; 2.7.1.107; 2.7.1.15; 2.7.1.107; 2.7.1.49;2.7.4.7,2; 7; 12; 13; 20; 21; 29; 32; 44; 50; 62,0.022757152576700985,True
+EC 3.1.1,672,68,8,4,4.9411764705882355,0.004926209351359846,WP_004295300.1; WP_048696912.1; WP_011107784.1; WP_011109241.1,MULTISPECIES: lactonase family protein [Bacteroidales]; MULTISPECIES: 6-phosphogluconolactonase [Bacteroides]; MULTISPECIES: DUF452 family protein [Bacteroides]; MULTISPECIES: lactonase family protein [Bacteroides],3.1.1.31; 3.1.1.31; 3.1.1.85; 3.1.1.31,19; 25; 26; 45,0.25123667691935214,True
+EC 2.4.1,672,68,15,4,2.635294117647059,0.055532266167247914,WP_011107643.1; WP_008765277.1; WP_011107719.1; WP_011107289.1,glycosyltransferase family 4 protein [Bacteroides thetaiotaomicron]; MULTISPECIES: glycosyltransferase family 4 protein [Bacteroides]; glycosyltransferase family 2 protein [Bacteroides thetaiotaomicron]; MULTISPECIES: glycosyltransferase family 2 protein [Bacteroides],2.4.1.52; 2.4.1.52; 2.4.1.289; 2.4.1.289,33; 42; 66; 68,1.0,False
+EC 6.3.2,672,68,10,3,2.9647058823529417,0.07082478303352588,WP_011107739.1; WP_008763710.1; WP_008760984.1,bifunctional phosphopantothenoylcysteine decarboxylase/phosphopantothenate--cysteine ligase CoaBC [Bacteroides thetaiotaomicron]; MULTISPECIES: UDP-N-acetylmuramate--L-alanine ligase [Bacteroides]; MULTISPECIES: bifunctional UDP-N-acetylmuramoyl-tripeptide:D-alanyl-D-alanine ligase/alanine racemase [Bacteroides],4.1.1.36;6.3.2.5; 6.3.2.8; 5.1.1.1;6.3.2.10,47; 60; 65,1.0,False
+EC 2.7.6,672,68,5,2,3.9529411764705884,0.08254685986003843,WP_008761418.1; WP_008762823.1,MULTISPECIES: 2-amino-4-hydroxy-6-hydroxymethyldihydropteridine diphosphokinase [Bacteroides]; MULTISPECIES: 2-amino-4-hydroxy-6-hydroxymethyldihydropteridine diphosphokinase [Bacteroides],2.7.6.3; 2.7.6.3,5; 48,1.0,False
+EC 1.8.4,672,68,1,1,9.882352941176471,0.10119047619047619,WP_011107997.1,GAF domain-containing protein [Bacteroides thetaiotaomicron],1.8.4.14,57,1.0,False
+EC 1.8.5,672,68,1,1,9.882352941176471,0.10119047619047619,WP_008765036.1,MULTISPECIES: TQO small subunit DoxD [Bacteroides],1.8.5.2,54,1.0,False
+EC 2.5.1,672,68,19,4,2.0804953560371517,0.11592292563748302,WP_162303115.1; WP_008762007.1; WP_011107374.1; WP_008759877.1,"MULTISPECIES: 3-phosphoshikimate 1-carboxyvinyltransferase [Bacteroides]; MULTISPECIES: cob(I)yrinic acid a,c-diamide adenosyltransferase [Bacteroides]; thiamine phosphate synthase [Bacteroides thetaiotaomicron]; MULTISPECIES: tRNA (adenosine(37)-N6)-dimethylallyltransferase MiaA [Bacteroides]",2.5.1.19; 2.5.1.17; 2.5.1.3; 2.5.1.75,9; 14; 15; 18,1.0,False
+EC 2.7.7,672,68,20,4,1.9764705882352942,0.1342686904160233,WP_011108144.1; WP_008761100.1; WP_008767820.1; WP_011109021.1,MULTISPECIES: bifunctional fucokinase/fucose-1-phosphate guanylyltransferase [Bacteroides]; MULTISPECIES: nicotinate (nicotinamide) nucleotide adenylyltransferase [Bacteroides]; MULTISPECIES: glycosyltransferase family protein [Bacteroides]; 2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase [Bacteroides thetaiotaomicron],2.7.1.52;2.7.7.30; 2.7.7.18; 2.7.7.92; 2.7.7.60,20; 22; 31; 39,1.0,False
+EC 1.3.98,672,68,2,1,4.9411764705882355,0.19227698530977225,WP_008763952.1,MULTISPECIES: radical SAM family heme chaperone HemW [Bacteroides],1.3.98.3,30,1.0,False
+EC 2.7.4,672,68,9,2,2.196078431372549,0.22876492562148454,WP_011108091.1; WP_008765649.1,RNA degradosome polyphosphate kinase [Bacteroides thetaiotaomicron]; MULTISPECIES: bifunctional hydroxymethylpyrimidine kinase/phosphomethylpyrimidine kinase [Bacteroides],2.7.4.1; 2.7.1.49;2.7.4.7,55; 62,1.0,False
+EC 3.6.1,672,68,9,2,2.196078431372549,0.22876492562148454,WP_061473548.1; WP_011108650.1,exopolyphosphatase [Bacteroides thetaiotaomicron]; MULTISPECIES: non-canonical purine NTP diphosphatase [Bacteroides],3.6.1.11;3.6.1.40; 3.6.1.66,41; 43,1.0,False
+EC 1.3.5,672,68,3,1,3.294117647058824,0.2742548435171386,WP_062695115.1,MULTISPECIES: quinone-dependent dihydroorotate dehydrogenase [Bacteroides],1.3.5.2,10,1.0,False
+EC 3.4.16,672,68,3,1,3.294117647058824,0.2742548435171386,WP_011108699.1,D-alanyl-D-alanine carboxypeptidase/D-alanyl-D-alanine-endopeptidase [Bacteroides thetaiotaomicron],3.4.16.4,56,1.0,False
+EC 3.5.2,672,68,3,1,3.294117647058824,0.2742548435171386,WP_011109295.1,"MULTISPECIES: class A beta-lactamase, subclass A2 [Bacteroides]",3.5.2.6,58,1.0,False
+EC 2.4.99,672,68,4,1,2.4705882352941178,0.3480226621133039,WP_011107146.1,penicillin-binding protein 1C [Bacteroides thetaiotaomicron],2.4.99.28,16,1.0,False
+EC 5.1.1,672,68,4,1,2.4705882352941178,0.3480226621133039,WP_008760984.1,MULTISPECIES: bifunctional UDP-N-acetylmuramoyl-tripeptide:D-alanyl-D-alanine ligase/alanine racemase [Bacteroides],5.1.1.1;6.3.2.10,65,1.0,False
+EC 6.3.3,672,68,4,1,2.4705882352941178,0.3480226621133039,WP_032813618.1,MULTISPECIES: 5-formyltetrahydrofolate cyclo-ligase [Bacteroides],6.3.3.2,11,1.0,False
+EC 2.8.1,672,68,5,1,1.9764705882352942,0.41439161267662034,WP_011108942.1,MULTISPECIES: rhodanese-like domain-containing protein [Bacteroides],2.8.1.1,3,1.0,False
+EC 4.1.1,672,68,14,2,1.411764705882353,0.4226894326091701,WP_008765048.1; WP_011107739.1,MULTISPECIES: indole-3-glycerol phosphate synthase TrpC [Bacteroides]; bifunctional phosphopantothenoylcysteine decarboxylase/phosphopantothenate--cysteine ligase CoaBC [Bacteroides thetaiotaomicron],4.1.1.48; 4.1.1.36;6.3.2.5,36; 47,1.0,False
+EC 1.5.1,672,68,6,1,1.647058823529412,0.47409381708140264,WP_011108044.1,MULTISPECIES: pyrroline-5-carboxylate reductase [Bacteroidales],1.5.1.2,35,1.0,False
+EC 2.1.1,672,68,6,1,1.647058823529412,0.47409381708140264,WP_011107785.1,MULTISPECIES: malonyl-ACP O-methyltransferase BioC [Bacteroides],2.1.1.197,1,1.0,False
+EC 4.2.3,672,68,6,1,1.647058823529412,0.47409381708140264,WP_011109049.1,3-dehydroquinate synthase [Bacteroides thetaiotaomicron],4.2.3.4,49,1.0,False
+EC 5.3.1,672,68,17,2,1.1626297577854672,0.5274478467647428,WP_008761124.1; WP_008766590.1,MULTISPECIES: ribose 5-phosphate isomerase A [Bacteroides]; MULTISPECIES: ROK family protein [Bacteroides],5.3.1.6; 5.3.1.8,61; 63,1.0,False
+EC 2.2.1,672,68,7,1,1.411764705882353,0.5277899438658841,WP_008766783.1,MULTISPECIES: 2-succinyl-5-enolpyruvyl-6-hydroxy-3-cyclohexene-1-carboxylic-acid synthase [Bacteroides],2.2.1.9,6,1.0,False
+EC 2.1.2,672,68,8,1,1.2352941176470589,0.5760760849442598,WP_011108788.1,MULTISPECIES: phosphoribosylglycinamide formyltransferase [Bacteroides],2.1.2.2,34,1.0,False
+EC 6.3.4,672,68,9,1,1.0980392156862746,0.6194899798596067,WP_016268654.1,biotin--[acetyl-CoA-carboxylase] ligase [Bacteroides thetaiotaomicron],6.3.4.15,17,1.0,False
+EC 3.1.3,672,68,24,2,0.823529411764706,0.7193021356634912,WP_011107287.1; WP_011107648.1,"MULTISPECIES: D-glycero-alpha-D-manno-heptose-1,7-bisphosphate 7-phosphatase [Bacteroides]; MULTISPECIES: ribosome small subunit-dependent GTPase A [Bacteroides]",3.1.3.82;3.1.3.83; 3.1.3.100,37; 40,1.0,False
+EC 3.5.4,672,68,12,1,0.823529411764706,0.7251148843721344,WP_008766987.1,MULTISPECIES: bifunctional diaminohydroxyphosphoribosylaminopyrimidine deaminase/5-amino-6-(5-phosphoribosylamino)uracil reductase RibD [Bacteroides],1.1.1.193;3.5.4.26,59,1.0,False
+EC 2.3.1,672,68,20,1,0.49411764705882355,0.8853853993190759,WP_011107783.1,MULTISPECIES: 8-amino-7-oxononanoate synthase [Bacteroides],2.3.1.47,4,1.0,False
+EC 5.1.3,672,68,20,1,0.49411764705882355,0.8853853993190759,WP_011108509.1,MULTISPECIES: aldose epimerase family protein [Bacteroides],5.1.3.3,28,1.0,False
+EC 4.2.1,672,68,27,1,0.3660130718954248,0.9471851053306478,WP_008766782.1,MULTISPECIES: o-succinylbenzoate synthase [Bacteroides],4.2.1.113,53,1.0,False
+EC 3.2.1,672,68,93,5,0.5313092979127134,0.9734444994208892,WP_162303178.1; WP_011108305.1; WP_011107895.1; WP_011107278.1; WP_011108299.1,beta-N-acetylhexosaminidase [Bacteroides thetaiotaomicron]; beta-N-acetylhexosaminidase [Bacteroides thetaiotaomicron]; MULTISPECIES: beta-N-acetylhexosaminidase [Bacteroides]; family 20 glycosylhydrolase [Bacteroides thetaiotaomicron]; glycoside hydrolase family 3 N-terminal domain-containing protein [Bacteroides thetaiotaomicron],3.2.1.52; 3.2.1.52; 3.2.1.52; 3.2.1.52; 3.2.1.52,24; 27; 38; 46; 52,1.0,False
+EC 1.1.1,672,68,38,1,0.26006191950464397,0.9846496482852004,WP_008766987.1,MULTISPECIES: bifunctional diaminohydroxyphosphoribosylaminopyrimidine deaminase/5-amino-6-(5-phosphoribosylamino)uracil reductase RibD [Bacteroides],1.1.1.193;3.5.4.26,59,1.0,False
+EC 1.1.98,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.11.1,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 1.12.1,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 1.13.11,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.13.12,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.16.3,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.17.1,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.17.4,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.17.7,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 1.2.1,672,68,5,0,0.0,1.0,,,,,1.0,False
+EC 1.2.4,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.2.7,672,68,6,0,0.0,1.0,,,,,1.0,False
+EC 1.2.8,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.3.1,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 1.4.1,672,68,6,0,0.0,1.0,,,,,1.0,False
+EC 1.4.3,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 1.4.4,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.5.5,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.6.5,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.7.1,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.7.2,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.7.99,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 1.8.1,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 2.1.3,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 2.3.3,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 2.4.2,672,68,11,0,0.0,1.0,,,,,1.0,False
+EC 2.6.1,672,68,13,0,0.0,1.0,,,,,1.0,False
+EC 2.6.99,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 2.7.2,672,68,7,0,0.0,1.0,,,,,1.0,False
+EC 2.7.8,672,68,4,0,0.0,1.0,,,,,1.0,False
+EC 2.7.9,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 2.8.3,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.1.13,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.1.2,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.1.4,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 3.1.5,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.1.6,672,68,5,0,0.0,1.0,,,,,1.0,False
+EC 3.1.7,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.10.1,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.13.2,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.2.2,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.5.1,672,68,11,0,0.0,1.0,,,,,1.0,False
+EC 3.5.3,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 3.5.99,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 4.1.2,672,68,10,0,0.0,1.0,,,,,1.0,False
+EC 4.1.3,672,68,4,0,0.0,1.0,,,,,1.0,False
+EC 4.1.99,672,68,5,0,0.0,1.0,,,,,1.0,False
+EC 4.2.99,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 4.3.1,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 4.3.2,672,68,4,0,0.0,1.0,,,,,1.0,False
+EC 4.3.3,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 4.3.99,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 4.4.1,672,68,4,0,0.0,1.0,,,,,1.0,False
+EC 4.6.1,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 5.1.99,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 5.3.3,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 5.4.2,672,68,4,0,0.0,1.0,,,,,1.0,False
+EC 5.4.99,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 5.5.1,672,68,1,0,0.0,1.0,,,,,1.0,False
+EC 6.1.1,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 6.2.1,672,68,5,0,0.0,1.0,,,,,1.0,False
+EC 6.3.1,672,68,5,0,0.0,1.0,,,,,1.0,False
+EC 6.3.5,672,68,7,0,0.0,1.0,,,,,1.0,False
+EC 6.4.1,672,68,3,0,0.0,1.0,,,,,1.0,False
+EC 7.1.1,672,68,11,0,0.0,1.0,,,,,1.0,False
+EC 7.1.2,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 7.2.2,672,68,2,0,0.0,1.0,,,,,1.0,False
+EC 7.2.4,672,68,3,0,0.0,1.0,,,,,1.0,False

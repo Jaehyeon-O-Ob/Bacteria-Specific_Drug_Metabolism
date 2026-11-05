@@ -25,7 +25,8 @@ ensure_all_dependencies()
 from utils.bacteria_rep_generate import ko_id_mapping, ko_filtering, extract_protein_sequence, kegg_scored_rep
 from utils.molecular_rep_generate import extract_node_sequence
 from utils.mole_antimicrobial_potential.workflow.dataset.dataset_representation import MoleculeDataset
-from utils.attention_analysis import analyze_attention
+from utils.ec_analysis import run_ec_attention_analysis
+from utils.input_utils import parse_input_txt, collect_user_proteins
 
 def main():
     parser = argparse.ArgumentParser(description="Run prediction with a specific Text file and Target Protein.")
@@ -42,7 +43,10 @@ def main():
             type=str,
             required=False,
             default=None,
-            help="Protein ID for attention analysis. It is automatically included in the prediction input (Default: None)"
+            help="User-defined protein ID(s), comma-separated, applied to every bacterial strain in the "
+                 "input file. They are automatically included in the prediction input and their EC numbers "
+                 "and atom-attention maps are reported. A per-record 'target protein:' line in the input "
+                 "text file can be used instead or in addition (Default: None)"
     )
 
     parser.add_argument(
@@ -51,8 +55,9 @@ def main():
             required=False,
             default=None,
             help="Comma-separated protein IDs to force-include in the prediction input "
-                 "(knowledge-based augmentation), added on top of the automatic KO filtering "
-                 "but NOT analyzed for attention (e.g., 'WP_011107642.1,WP_008760980.1')"
+                 "(knowledge-based augmentation), added on top of the automatic KO filtering. "
+                 "Their EC numbers and atom-attention maps are reported as user-defined proteins "
+                 "(e.g., 'WP_011107642.1,WP_008760980.1')"
     )
 
     parser.add_argument(
@@ -101,35 +106,6 @@ def main():
     with open(hp_config_path, 'r') as f:
         hp_config = json.load(f)['hyperparams']
 
-    # Parse input text file
-    def parse_input_txt(file_path):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-        
-        records = []
-        current_record = {}
-        
-        for line in lines:
-            line = line.strip()
-            if not line:
-                if current_record:
-                    records.append(current_record)
-                    current_record = {}
-                continue
-                
-            lower_line = line.lower()
-            if lower_line.startswith('drug smiles:'):
-                current_record['drug smiles code'] = line.split(':', 1)[1].strip()
-            elif lower_line.startswith('drug:'):
-                current_record['drug'] = line.split(':', 1)[1].strip()
-            elif lower_line.startswith('bacterial strain name:'):
-                current_record['bacterial strain name'] = line.split(':', 1)[1].strip()
-                
-        if current_record:
-            records.append(current_record)
-            
-        return pd.DataFrame(records)
-
     pred_df = parse_input_txt(args.input_txt)
     
     # Check required columns
@@ -156,19 +132,18 @@ def main():
     print("Generating Bacteria Representations...")
     ko_id_mapping(bacteria_list, cpu_cores=args.cpu_cores)
     
-    # Proteins to force-include in the prediction input, added on top of the
-    # automatic KO-based filtering. This is the union of:
-    #   - knowledge-based proteins supplied via --include_proteins, and
-    #   - the --target_protein (it must be in the input to be analyzed for attention).
-    inject_proteins = []
-    if args.include_proteins:
-        inject_proteins.extend([p.strip() for p in args.include_proteins.split(',') if p.strip()])
-    if args.target_protein and args.target_protein not in inject_proteins:
-        inject_proteins.append(args.target_protein)
-
-    include_dict = None
-    if inject_proteins:
-        include_dict = {bac: inject_proteins for bac in bacteria_list}
+    # User-defined proteins force-included in the prediction input, added on top
+    # of the automatic KO-based filtering (built once per bacterial strain):
+    #   - --target_protein / --include_proteins (applied to every strain), and
+    #   - the optional 'target protein:' line of each record in the input text
+    #     file (applied to the strain of that record).
+    # Their EC numbers and atom-attention maps are reported in the analysis.
+    include_dict = collect_user_proteins(pred_df, 'bacterial strain',
+                                         target_protein=args.target_protein,
+                                         include_proteins=args.include_proteins)
+    for bac, prots in include_dict.items():
+        if prots:
+            print(f"User-defined proteins for {bac}: {', '.join(prots)}")
 
     ko_filtering(bacteria_list, include_dict)
     extract_protein_sequence(bacteria_list, MAX_TOKENS_PER_BATCH=args.esm_max_tokens)
@@ -253,69 +228,63 @@ def main():
 
     all_preds = []
     all_probs = []
+    all_rep_ecs = []
+
+    def _safe_name(name):
+        return "".join(c if (c.isalnum() or c in "._-") else "_" for c in str(name)).strip("_")
 
     for batch_idx, batch in enumerate(dataloader):
         padded_proteins, padded_drugs, keggs, _, prot_mask, drug_mask = [b.to(device) if torch.is_tensor(b) else b for b in batch]
-        
-        combined_reps = []
+
+        fold_probs = []
         att1_list = []
         att2_list = []
-        
+
+        # Fold-wise ensemble (as in the paper): each fold-specific Bi-MHA model
+        # produces its own combined representation, which is classified by the
+        # XGBoost model of the same fold; the five probabilities are averaged.
         with torch.no_grad():
-            for m in models:
+            for m, x in zip(models, xgbs):
                 logit, cr1_att, cr2_att, prot_rep, drug_rep, combined_rep = m(
                     padded_proteins, padded_drugs, keggs, prot_mask, drug_mask
                 )
-                combined_reps.append(combined_rep.cpu().numpy())
+                fold_probs.append(x.predict_proba(combined_rep.cpu().numpy())[:, 1][0])
                 att1_list.append(cr1_att)
                 att2_list.append(cr2_att)
-                
-        # Average representations for xgb
-        avg_rep = np.mean(combined_reps, axis=0) # [1, rep_dim]
-        
-        # XGB Prediction
-        xgb_probs = []
-        for x in xgbs:
-            prob = x.predict_proba(avg_rep)[:, 1]
-            xgb_probs.append(prob[0])
-            
-        final_prob = np.mean(xgb_probs)
+
+        final_prob = float(np.mean(fold_probs))
         pred_label = 1 if final_prob >= 0.5 else 0
         all_preds.append(pred_label)
         all_probs.append(final_prob)
-        
-        # result and attention analysis
-        if args.target_protein:
-            data_row = pred_df.iloc[batch_idx]
-            bac = data_row['bacterial strain']
-            drug_name = data_row['DrugName']
-            drug_smiles = data_row['drug smiles code']
-            
-            prot_keys = protein_keys_dict[bac]
-            if args.target_protein in prot_keys:
-                target_prot_idx = prot_keys.index(args.target_protein)
-                
-                # Average attention over models
-                avg_cr1 = torch.stack(att1_list).mean(dim=0).squeeze(0)
-                avg_cr2 = torch.stack(att2_list).mean(dim=0).squeeze(0)
-                
-                prot_dict = {k: k for k in prot_keys}
-                
-                analyze_attention(
-                    drug_name=drug_name,
-                    drug_smiles=drug_smiles,
-                    target_protein=args.target_protein,
-                    prot_dict=prot_dict,
-                    cr1_att=avg_cr1,
-                    cr2_att=avg_cr2,
-                    save_dir=attn_dir,
-                    target_prot_idx=target_prot_idx
-                )
-            else:
-                print(f"Target protein {args.target_protein} not found in {bac}")
+
+        # Attention-based interpretation (Case Study procedure of the paper):
+        # protein ranking by mean fold rank -> EC sub-subclass enrichment of the
+        # top 10% -> all EC classes with FE > 1 and P <= 0.05 are reported as
+        # representative candidates with EC-averaged and per-protein atom maps
+        # (+ user-defined proteins)
+        data_row = pred_df.iloc[batch_idx]
+        bac = data_row['bacterial strain']
+        drug_name = data_row['DrugName']
+        drug_smiles = data_row['drug smiles code']
+
+        result = run_ec_attention_analysis(
+            drug_name=drug_name,
+            drug_smiles=drug_smiles,
+            bacteria_name=bac,
+            protein_ids=protein_keys_dict[bac],
+            cross1_list=att1_list,
+            cross2_list=att2_list,
+            kofam_tsv=os.path.join(data_dir, f"{bac}_kegg_result.tsv"),
+            fasta_path=os.path.join(data_dir, f"{bac}_proteins.fasta"),
+            save_dir=os.path.join(attn_dir, _safe_name(f"{drug_name}_{bac}")),
+            user_proteins=include_dict.get(bac, []),
+        )
+        summary = result['enriched_summary']
+        all_rep_ecs.append('-' if summary.empty else '; '.join(summary['EC_level3']))
 
     pred_df['Prediction'] = all_preds
     pred_df['Probability'] = all_probs
+    pred_df['Representative EC (top 10%, P<=0.05)'] = all_rep_ecs
     
     # Restore original column names
     pred_df = pred_df.rename(columns={

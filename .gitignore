@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+utils/esm_official/
+utils/kofam_db/
+utils/mole_antimicrobial_potential/
+input/*_kegg_result.tsv
+input/*_filtered_prots.fasta
+input/*_esmc_600m.pt
+tmp/

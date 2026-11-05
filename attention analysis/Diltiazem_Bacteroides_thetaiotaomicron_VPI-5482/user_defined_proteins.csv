@@ -1,0 +1,2 @@
+protein_id,description,kegg_ko(first),ec_numbers,ec_level3,mean_rank,order,n_input_proteins,in_top10pct,ec_level3_representative,Atom_map
+WP_008760980.1,MULTISPECIES: SGNH/GDSL hydrolase family protein [Bacteroides],-,-,-,310.4,299,672,False,-,atom_attention_user_WP_008760980.1.svg
