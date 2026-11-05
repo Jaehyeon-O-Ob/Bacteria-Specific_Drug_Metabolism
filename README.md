@@ -157,6 +157,29 @@ This tutorial notebook covers the following steps:
 For the main training, external validation, and application datasets, see the Supplementary section of the paper [1] (main dataset: Supplementary Table S1; application dataset: Supplementary Tables S7 and S8).
 
 ---
+### License
+
+The source code in this repository is released under the [MIT License](LICENSE).
+Copyright (c) 2026 Korea Research Institute of Chemical Technology (KRICT), Chonnam National University, and Duksung Women's University.
+
+> **Built with ESM.** This pipeline uses ESM C 600M (EvolutionaryScale) to generate protein embeddings.
+
+**Third-party models, code and data**
+
+The following components are **not** covered by the MIT License and remain subject to their own terms:
+
+| Component | Usage in this repository | License / terms |
+| :--- | :--- | :--- |
+| ESM C 600M (weights) | Downloaded automatically on first run | [Cambrian Non-Commercial License Agreement](https://www.evolutionaryscale.ai/policies/cambrian-non-commercial-license-agreement) |
+| Trained model weights (`model/*.pth`, `model/xgb *.json`) | Trained on ESM C 600M embeddings | Distributed for non-commercial use in accordance with the Cambrian Non-Commercial License Agreement |
+| ESM source code | Cloned automatically on first run | [Cambrian Open License Agreement](https://www.evolutionaryscale.ai/policies/cambrian-open-license-agreement) |
+| MolE (code and pre-trained model) | Downloaded automatically on first run | MIT License (code); see the [MolE repository](https://github.com/rolayoalarcon/mole_antimicrobial_potential) and Zenodo record 10803099 |
+| KofamScan | Downloaded automatically on first run | MIT License |
+| KOfam database and KEGG-derived files (`utils/kegg_ko_to_ec (261105).tsv`, `utils/ko_pathway_mapping.csv`, `utils/all_bacteria_pathways.csv`, `utils/valid metabolism kos (260513).txt`) | Protein annotation, pathway features, KO-to-EC mapping | [KEGG](https://www.kegg.jp/kegg/legal.html) terms of use (free for academic use; commercial use requires a license) |
+
+Users are responsible for complying with the licenses of these third-party components, in particular the non-commercial restriction of ESM C 600M and of the model weights derived from it, and the KEGG terms of use.
+
+---
 ### Reference
 
 [1] Park J, Kim SE, Yang H, Cho N-C, Kim H, Shin HK. Prediction of bacteria-specific drug metabolism using a cross-attention-based model. *Briefings in Bioinformatics* 2026;27(5):bbag578. https://doi.org/10.1093/bib/bbag578
